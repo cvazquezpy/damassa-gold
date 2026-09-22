@@ -7,8 +7,8 @@ const fs = require('fs');
 
 const ONZA_TROY_EN_GRAMOS = 31.1034768;
 const MARGEN_COMPRA = 0.90;  // Damassa compra al 90% de la cotización internacional
-const MARGEN_VENTA = 1.03;   // Venta = compra + 3%
-const CASA_CAMBIO_PREFERIDA = 'cambioschaco'; // Cambios Chaco, con fallback a la mejor venta
+const MARGEN_compra = 1.03;   // compra = compra + 3%
+const CASA_CAMBIO_PREFERIDA = 'cambioschaco'; // Cambios Chaco, con fallback a la mejor compra
 
 const TITULOS = [
   { identificacion: 'Oro 24k',        fraccion: 24 / 24 },
@@ -24,16 +24,16 @@ async function obtenerCotizacionDolar() {
   const casas = data.dolarpy;
 
   if (casas[CASA_CAMBIO_PREFERIDA]) {
-    return parseFloat(casas[CASA_CAMBIO_PREFERIDA].venta);
+    return parseFloat(casas[CASA_CAMBIO_PREFERIDA].compra);
   }
 
-  // Fallback: si "cambioschaco" no está disponible, usamos la casa con mayor venta
-  let mejorVenta = 0;
+  // Fallback: si "cambioschaco" no está disponible, usamos la casa con mayor compra
+  let mejorcompra = 0;
   for (const clave in casas) {
-    const venta = parseFloat(casas[clave].venta);
-    if (venta > mejorVenta) mejorVenta = venta;
+    const compra = parseFloat(casas[clave].compra);
+    if (compra > mejorcompra) mejorcompra = compra;
   }
-  return mejorVenta;
+  return mejorcompra;
 }
 
 async function obtenerCotizacionOro() {
@@ -51,11 +51,11 @@ async function main() {
 
   const listaTipos = TITULOS.map((t) => {
     const compra = compra24k * t.fraccion;
-    const venta = compra * MARGEN_VENTA;
+    const compra = compra * MARGEN_compra;
     return {
       identificacion: t.identificacion,
       compra: Math.round(compra).toString(),
-      venta: Math.round(venta).toString(),
+      compra: Math.round(compra).toString(),
     };
   });
 
