@@ -4,12 +4,10 @@ on:
   schedule:
     # Se ejecuta cada 15 minutos
     - cron: '*/15 * * * *'
-  # Permite ejecutar el flujo manualmente desde la pestaña Actions en GitHub
   workflow_dispatch:
 
 jobs:
   update-data:
-    # Usamos la versión de Ubuntu explícita para evitar sorpresas en futuras migraciones
     runs-on: ubuntu-24.04
 
     steps:
@@ -19,19 +17,17 @@ jobs:
       - name: Configurar Node.js
         uses: actions/setup-node@v4
         with:
-          # Actualizado a Node.js 24 acorde a la plataforma actual
-          node-version: '24'
+          node-version: 24
 
       - name: Ejecutar script de actualización
         run: |
-          # Reemplaza esta línea con el comando real que actualiza tu cotizaciones.json
-          node update-script.js
+          # Reemplaza con tu comando real si no usas index.js
+          node index.js
 
       - name: Hacer Commit y Push de los cambios a cotizaciones.json
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add cotizaciones.json
-          # Solo hace commit si hay cambios detectados
           git diff --quiet && git diff --staged --quiet || git commit -m "chore: actualización automática de cotizaciones [skip ci]"
           git push
