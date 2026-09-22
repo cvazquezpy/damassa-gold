@@ -22,7 +22,7 @@ jobs:
       - name: Ejecutar script de actualización
         run: |
           # Reemplaza con tu comando real si no usas index.js
-          node index.js
+          node actualizar-cotizaciones.js.js
 
       - name: Hacer Commit y Push de los cambios a cotizaciones.json
         run: |
