@@ -20,7 +20,7 @@ function validar(nombre, valor, min, max) {
   return valor;
 }
 
-const ONZA_TROY_EN_GRAMOS = 31.1034768;
+const ONZA_TROY_EN_GRAMOS = 32.15;
 const MARGEN_COMPRA = 0.90;  // Damassa compra al 90% de la cotización internacional
 const MARGEN_VENTA = 1.03;   // Venta = compra + 3%
 const CASA_CAMBIO_PREFERIDA = 'cambioschaco'; // Cambios Chaco, con fallback a la mejor compra
