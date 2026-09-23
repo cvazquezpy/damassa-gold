@@ -5,6 +5,21 @@
 
 const fs = require('fs');
 
+const TIMEOUT_MS = 15000; // si una API no responde en 15 s, se aborta sin tocar el JSON
+
+async function obtenerJson(url) {
+  const res = await fetch(url, { signal: AbortSignal.timeout(TIMEOUT_MS) });
+  if (!res.ok) throw new Error(`HTTP ${res.status} en ${url}`);
+  return res.json();
+}
+
+function validar(nombre, valor, min, max) {
+  if (!Number.isFinite(valor) || valor < min || valor > max) {
+    throw new Error(`${nombre} fuera de rango o inválido: ${valor}`);
+  }
+  return valor;
+}
+
 const ONZA_TROY_EN_GRAMOS = 31.1034768;
 const MARGEN_COMPRA = 0.90;  // Damassa compra al 90% de la cotización internacional
 const MARGEN_VENTA = 1.03;   // Venta = compra + 3%
@@ -19,8 +34,7 @@ const TITULOS = [
 ];
 
 async function obtenerCotizacionDolar() {
-  const res = await fetch('http://dolar.melizeche.com/api/1.0/');
-  const data = await res.json();
+  const data = await obtenerJson('http://dolar.melizeche.com/api/1.0/');
   const casas = data.dolarpy;
 
   if (casas[CASA_CAMBIO_PREFERIDA]) {
@@ -37,14 +51,14 @@ async function obtenerCotizacionDolar() {
 }
 
 async function obtenerCotizacionOro() {
-  const res = await fetch('https://api.goldprice.dev/v1/prices?symbol=XAU-USD-SPOT');
-  const data = await res.json();
+  const data = await obtenerJson('https://api.goldprice.dev/v1/prices?symbol=XAU-USD-SPOT');
   return parseFloat(data.symbols[0].price);
 }
 
 async function main() {
-  const usdPyg = await obtenerCotizacionDolar();
-  const xauUsd = await obtenerCotizacionOro();
+  // Rangos amplios de sanidad: si una API devuelve basura, NO se publica un JSON roto
+  const usdPyg = validar('USD/PYG', await obtenerCotizacionDolar(), 3000, 20000);
+  const xauUsd = validar('XAU/USD', await obtenerCotizacionOro(), 1000, 20000);
 
   const precioGramo24kPyg = (xauUsd / ONZA_TROY_EN_GRAMOS) * usdPyg;
   const compra24k = precioGramo24kPyg * MARGEN_COMPRA;
