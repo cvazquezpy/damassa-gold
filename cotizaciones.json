@@ -1,32 +1,32 @@
 {
-  "cotizacionOro": "4164.22",
+  "cotizacionOro": "4162.50",
   "cotizacionUsd": "5640",
-  "actualizado": "2026-10-19T13:00:13.946Z",
+  "actualizado": "2026-10-19T13:10:12.018Z",
   "listaTipos": [
     {
       "identificacion": "Oro 24k",
-      "compra": "657468",
-      "venta": "677192"
+      "compra": "657196",
+      "venta": "676912"
     },
     {
       "identificacion": "Oro 22k",
-      "compra": "602679",
-      "venta": "620759"
+      "compra": "602430",
+      "venta": "620503"
     },
     {
       "identificacion": "Oro 18k",
-      "compra": "493101",
-      "venta": "507894"
+      "compra": "492897",
+      "venta": "507684"
     },
     {
       "identificacion": "Chafa Italiana",
-      "compra": "493101",
-      "venta": "507894"
+      "compra": "492897",
+      "venta": "507684"
     },
     {
       "identificacion": "Chafa Nacional",
-      "compra": "438312",
-      "venta": "451461"
+      "compra": "438131",
+      "venta": "451275"
     }
   ]
 }
